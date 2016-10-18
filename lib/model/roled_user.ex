@@ -6,11 +6,11 @@ defmodule Guardian.Roles.RoledUser do
 
       import Guardian.Roles.Utils
 
-      def has_site_association(%user_mod{} = user, %group_mod{} = site) when is_map(user) and is_map(site),
-        do: has_site_association(user, site.id)
-      def has_site_association(%user_mod{} = user, site_id) when is_binary(site_id),
-        do: has_site_association(user, String.to_integer(site_id))
-      def has_site_association(%user_mod{} = user, site_id) when is_integer(site_id) do
+      def has_group_association(%user_mod{} = user, %group_mod{} = site) when is_map(user) and is_map(site),
+        do: has_group_association(user, site.id)
+      def has_group_association(%user_mod{} = user, site_id) when is_binary(site_id),
+        do: has_group_association(user, String.to_integer(site_id))
+      def has_group_association(%user_mod{} = user, site_id) when is_integer(site_id) do
         user = user |> repo.preload(:sites)
         Enum.filter(user.sites, fn(s) -> s.id == site_id end)
         |> length > 0
