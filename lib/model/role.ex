@@ -4,10 +4,11 @@ defmodule Guardian.Roles.Role do
 
       import Guardian.Roles.Utils
 
-      def find(%user_mod{} = user, %group_mod{} = site) do
+      def find(%user_mod{} = user, %group_mod{} = grp) do
         user = user |> repo.preload(:roles)
-        Enum.filter(user.roles, fn(r) -> r.site_id == site.id end)
-        |> List.last || struct(role_mod, %{site_id: site.id, user_id: user.id, role: 0})
+        criteria = %{user_id: user.id, role: 0} |> Map.put_new(group_id, grp.id)
+        Enum.filter(user.roles, fn(r) -> Map.get(r, group_id) == grp.id end)
+        |> List.last || struct(role_mod, criteria)
       end
 
     end

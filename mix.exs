@@ -24,7 +24,8 @@ defmodule GuardianRolesAuth.Mixfile do
   defp elixirc_paths(_),     do: ["lib"]
 
   defp deps do
-    [{:dialyxir, "~> 0.3.5", only: :dev},
+    [{:plug, "~> 1.2.1 or ~> 1.3"},
+     {:dialyxir, "~> 0.3.5", only: :dev},
      {:ex_doc, "~> 0.13", only: :dev}]
   end
 
