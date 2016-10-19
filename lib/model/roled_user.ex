@@ -57,7 +57,7 @@ defmodule Guardian.Roles.RoledUser do
 
       def perms(%user_mod{} = u, %group_mod{} = s) do
         u_role = role_mod.find(u, s).role
-        Application.get_env(:guardian_roles_auth, :permissions)
+        Dict.get(Application.get_env(:guardian_roles_auth, GuardianRolesAuth), :permissions)
           |> Map.delete(:sys)
           |> Enum.filter_map(fn({key, list}) when is_list(list) ->
                case list do

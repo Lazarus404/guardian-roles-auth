@@ -18,6 +18,6 @@ defmodule Guardian.Roles.Utils do
     Dict.get(Application.get_env(:guardian_roles_auth, GuardianRolesAuth), :group_id)
   end
   def group_name do
-    Dict.get(Application.get_env(:guardian_roles_auth, GuardianRolesAuth), :groups)
+    Dict.get(Application.get_env(:guardian_roles_auth, GuardianRolesAuth), :group_name)
   end
 end
