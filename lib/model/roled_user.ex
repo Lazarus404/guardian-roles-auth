@@ -6,13 +6,13 @@ defmodule Guardian.Roles.RoledUser do
 
       import Guardian.Roles.Utils
 
-      def has_group_association(%user_mod{} = user, %group_mod{} = site) when is_map(user) and is_map(site),
-        do: has_group_association(user, site.id)
-      def has_group_association(%user_mod{} = user, site_id) when is_binary(site_id),
-        do: has_group_association(user, String.to_integer(site_id))
-      def has_group_association(%user_mod{} = user, site_id) when is_integer(site_id) do
-        user = user |> repo.preload(:sites)
-        Enum.filter(user.sites, fn(s) -> s.id == site_id end)
+      def has_group_association(%user_mod{} = user, %group_mod{} = grp) when is_map(user) and is_map(grp),
+        do: has_group_association(user, grp.id)
+      def has_group_association(%user_mod{} = user, grp_id) when is_binary(grp_id),
+        do: has_group_association(user, String.to_integer(grp_id))
+      def has_group_association(%user_mod{} = user, grp_id) when is_integer(grp_id) do
+        user = user |> repo.preload(group_name)
+        Enum.filter(Map.get(user, group_name), fn(s) -> s.id == grp_id end)
         |> length > 0
       end
 
@@ -57,7 +57,7 @@ defmodule Guardian.Roles.RoledUser do
 
       def perms(%user_mod{} = u, %group_mod{} = s) do
         u_role = role_mod.find(u, s).role
-        Application.get_env(:dataroom, :permissions)
+        Application.get_env(:guardian_roles_auth, :permissions)
           |> Map.delete(:sys)
           |> Enum.filter_map(fn({key, list}) when is_list(list) ->
                case list do
