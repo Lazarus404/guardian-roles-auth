@@ -5,6 +5,13 @@ defmodule Guardian.Roles.RoledUser do
       
       import Ecto.{Query, Changeset, Repo}
 
+      @default_perms %{
+        default:  [],
+        user:     [:primary, :secondary, :tertiary],
+        admin:    [:upload, :dashboard],
+        sys:      [:sys]
+      }
+
       def has_group_association(%user_mod{} = user, %group_mod{} = grp) when is_map(user) and is_map(grp),
         do: has_group_association(user, grp.id)
       def has_group_association(%user_mod{} = user, grp_id) when is_binary(grp_id),
@@ -42,7 +49,7 @@ defmodule Guardian.Roles.RoledUser do
       end
       def revoke_sys!(%user_mod{} = u, _ \\ nil) do
         repo.changeset(u, %{is_sys: false}) # remove just the is_sys flag
-        |> Repo.update!
+        |> repo.update!
       end
 
       def is_default(%user_mod{} = u, %group_mod{} = s), do: role_mod.find(u, s).role == 0
@@ -56,7 +63,7 @@ defmodule Guardian.Roles.RoledUser do
 
       def perms(%user_mod{} = u, %group_mod{} = s) do
         u_role = role_mod.find(u, s).role
-        Dict.get(Application.get_env(:guardian_roles_auth, GuardianRolesAuth), :permissions)
+        Dict.get(Application.get_env(:guardian_roles_auth, GuardianRolesAuth), :permissions, @default_perms)
           |> Map.delete(:sys)
           |> Enum.filter_map(fn({key, list}) when is_list(list) ->
                case list do
