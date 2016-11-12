@@ -17,8 +17,8 @@ defmodule Guardian.Roles.RoledUser do
       def has_group_association(%user_mod{} = user, grp_id) when is_binary(grp_id),
         do: has_group_association(user, String.to_integer(grp_id))
       def has_group_association(%user_mod{} = user, grp_id) when is_integer(grp_id) do
-        user = user |> repo.preload(group_name)
-        Enum.filter(Map.get(user, group_name), fn(s) -> s.id == grp_id end)
+        user = user |> repo.preload(group_name())
+        Enum.filter(Map.get(user, group_name()), fn(s) -> s.id == grp_id end)
         |> length > 0
       end
 

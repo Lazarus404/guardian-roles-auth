@@ -17,7 +17,7 @@ defmodule Guardian.Roles.UserFromAuth do
   end
 
   # We need to check the pw for the identity provider
-  defp validate_auth_for_registration(%auth_mod{provider: :identity} = auth) do
+  defp validate_auth_for_registration(%{provider: :identity} = auth) do
     pw = Map.get(auth.credentials.other, :password)
     pwc = Map.get(auth.credentials.other, :password_confirmation)
     email = auth.info.email
