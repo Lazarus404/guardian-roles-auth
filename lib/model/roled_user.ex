@@ -1,10 +1,9 @@
 defmodule Guardian.Roles.RoledUser do
   defmacro __using__(_opts) do
     quote do
-      import Ecto.Query
-      import Ecto.Changeset
-
       import Guardian.Roles.Utils
+      
+      import Ecto.{Query, Changeset, Repo}
 
       def has_group_association(%user_mod{} = user, %group_mod{} = grp) when is_map(user) and is_map(grp),
         do: has_group_association(user, grp.id)
