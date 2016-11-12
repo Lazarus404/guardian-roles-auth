@@ -26,7 +26,8 @@ defmodule GuardianRolesAuth.Mixfile do
   defp deps do
     [{:plug, "~> 1.2.1 or ~> 1.3"},
      {:dialyxir, "~> 0.3.5", only: :dev},
-     {:ex_doc, "~> 0.13", only: :dev}]
+     {:ex_doc, "~> 0.13", only: :dev},
+     {:comeonin, "~> 2.5"}]
   end
 
   defp description do
