@@ -60,9 +60,24 @@ defmodule Guardian.Roles.RoledUser do
       def has_user(%user_mod{} = u, %group_mod{} = s), do: role_mod.find(u, s).role > 0
       def has_upload(%user_mod{} = u, %group_mod{} = s), do: role_mod.find(u, s).role >= 10
       def has_admin(%user_mod{} = u, %group_mod{} = s), do: role_mod.find(u, s).role >= 50
-
+      
+      def perms(%user_mod{} = u, :manager) do
+        if u.is_sys do
+          do_perms(u, role_sys_sys)
+        else
+          u_role = role_mod.find(u).role
+          if u_role >= 50 do
+            do_perms(u, u_role)
+          else
+            do_perms(u, role_default)
+          end
+        end
+      end
       def perms(%user_mod{} = u, %group_mod{} = s) do
-        u_role = role_mod.find(u, s).role
+        do_perms(u, role_mod.find(u, s).role)
+      end
+
+      defp do_perms(%user_mod{} = u, u_role) when is_integer(u_role) do
         Dict.get(Application.get_env(:guardian_roles_auth, GuardianRolesAuth), :permissions, @default_perms)
           |> Map.delete(:sys)
           |> Enum.filter_map(fn({key, list}) when is_list(list) ->

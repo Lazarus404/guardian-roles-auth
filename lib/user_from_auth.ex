@@ -98,9 +98,12 @@ defmodule Guardian.Roles.UserFromAuth do
   defp create_user_from_auth(auth, current_user, repo) do
     user = current_user
     user = if !user, do: repo.get_by(user_mod, email: auth.info.email), else: user
-    user = if !user, do: create_user(auth, repo), else: user
-    authorization_from_auth(user, auth, repo)
-    {:ok, user}
+    with {:ok, user} <- if !user, do: create_user(auth, repo), else: {:ok, user} do
+      authorization_from_auth(user, auth, repo)
+      {:ok, user}
+    else
+      e -> e
+    end
   end
 
   defp create_user(auth, repo) do
@@ -108,8 +111,11 @@ defmodule Guardian.Roles.UserFromAuth do
     result = user_mod.registration_changeset(struct(user_mod, %{}), scrub(%{email: auth.info.email, name: name}))
     |> repo.insert
     case result do
-      {:ok, user} -> user
-      {:error, reason} -> repo.rollback(reason)
+      {:ok, user} ->
+        {:ok, user}
+      {:error, reason} ->
+        repo.rollback(reason)
+        {:error, reason}
     end
   end
 
