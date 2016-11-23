@@ -7,13 +7,6 @@ defmodule Guardian.Roles.RoledUser do
 
       @config unquote(opts)[:config]
 
-      @default_perms %{
-        default:  [],
-        user:     [:primary, :secondary, :tertiary],
-        admin:    [:upload, :dashboard],
-        sys:      [:sys]
-      }
-
       def has_group_association(%user_mod{} = user, %group_mod{} = grp) when is_map(user) and is_map(grp),
         do: has_group_association(user, grp.id)
       def has_group_association(%user_mod{} = user, grp_id) when is_binary(grp_id),
@@ -80,8 +73,7 @@ defmodule Guardian.Roles.RoledUser do
       end
 
       defp do_perms(%user_mod{} = u, u_role) when is_integer(u_role) do
-        IO.inspect @config
-        Dict.get(@config || [], :permissions) || @default_perms
+        Dict.get(@config || [], :permissions)
           |> Map.delete(:sys)
           |> Enum.filter_map(fn({key, list}) when is_list(list) ->
                case list do
