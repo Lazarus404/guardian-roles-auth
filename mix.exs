@@ -18,6 +18,7 @@ defmodule GuardianRolesAuth.Mixfile do
 
   def application do
     [applications: [
+      :plug,
       :logger,
       :comeonin,
       :ueberauth_identity
@@ -32,10 +33,10 @@ defmodule GuardianRolesAuth.Mixfile do
      {:dialyxir, "~> 0.3.5", only: :dev},
      {:ex_doc, "~> 0.13", only: :dev},
      {:poison, "~> 2.2", override: true},
+     {:guardian, "~> 0.13.0"},
      {:guardian_db, "0.7.0"},
      {:ueberauth, github: "ueberauth/ueberauth", override: true},
      {:ueberauth_identity, "~>0.2.3"},
-     {:guardian, "~> 0.13.0"},
      {:comeonin, "~> 2.5"}]
   end
 

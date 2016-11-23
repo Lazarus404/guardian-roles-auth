@@ -5,7 +5,7 @@ defmodule Guardian.Roles.RoledUser do
       
       import Ecto.{Query, Changeset, Repo}
 
-      @config opts[:config]
+      @config unquote(opts)[:config]
 
       @default_perms %{
         default:  [],
@@ -80,7 +80,8 @@ defmodule Guardian.Roles.RoledUser do
       end
 
       defp do_perms(%user_mod{} = u, u_role) when is_integer(u_role) do
-        Dict.get(@config || [], :permissions, @default_perms)
+        IO.inspect @config
+        Dict.get(@config || [], :permissions) || @default_perms
           |> Map.delete(:sys)
           |> Enum.filter_map(fn({key, list}) when is_list(list) ->
                case list do
