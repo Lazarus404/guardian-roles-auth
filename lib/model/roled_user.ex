@@ -5,6 +5,8 @@ defmodule Guardian.Roles.RoledUser do
       
       import Ecto.{Query, Changeset, Repo}
 
+      alias Guardian.Roles.RoledUser
+
       @default_perms %{
         default:  [],
         user:     [:primary, :secondary, :tertiary],
@@ -78,7 +80,7 @@ defmodule Guardian.Roles.RoledUser do
       end
 
       defp do_perms(%user_mod{} = u, u_role) when is_integer(u_role) do
-        Dict.get(Application.get_env(:guardian_roles_auth, GuardianRolesAuth), :permissions, @default_perms)
+        Dict.get(RoledUser.config, :permissions, @default_perms)
           |> Map.delete(:sys)
           |> Enum.filter_map(fn({key, list}) when is_list(list) ->
                case list do
@@ -120,5 +122,9 @@ defmodule Guardian.Roles.RoledUser do
       end
 
     end
+  end
+
+  def config do
+    Application.get_env(:guardian_roles_auth, GuardianRolesAuth)
   end
 end
