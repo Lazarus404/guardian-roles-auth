@@ -11,8 +11,8 @@ defmodule GuardianRolesAuth.Mixfile do
               ],
      description: description,
      elixirc_paths: elixirc_paths(Mix.env),
-     # build_embedded: Mix.env == :prod,
-     # start_permanent: Mix.env == :prod,
+     build_embedded: Mix.env == :prod,
+     start_permanent: Mix.env == :prod,
      deps: deps]
   end
 
