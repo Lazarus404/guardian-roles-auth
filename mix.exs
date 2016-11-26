@@ -3,16 +3,16 @@ defmodule GuardianRolesAuth.Mixfile do
 
   def project do
     [app: :guardian_roles_auth,
-     version: "0.1.0",
+     version: "0.1.1",
      elixir: "~> 1.3",
-     package: [ maintainers: ["dgvncsz0f"],
+     package: [ maintainers: ["Lazarus404"],
                 licenses: ["BSD-3"],
-                links: %{"github" => "http://github.com/dgvncsz0f/zipflow"}
+                links: %{"github" => "http://github.com/Lazarus404/guardian-roles-auth"}
               ],
      description: description,
      elixirc_paths: elixirc_paths(Mix.env),
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
+     # build_embedded: Mix.env == :prod,
+     # start_permanent: Mix.env == :prod,
      deps: deps]
   end
 
@@ -33,7 +33,7 @@ defmodule GuardianRolesAuth.Mixfile do
      {:dialyxir, "~> 0.3.5", only: :dev},
      {:ex_doc, "~> 0.13", only: :dev},
      {:poison, "~> 2.2", override: true},
-     {:guardian, "~> 0.13.0"},
+     {:guardian, "~> 0.13.0", override: true},
      {:guardian_db, "0.7.0"},
      {:ueberauth, github: "ueberauth/ueberauth", override: true},
      {:ueberauth_identity, "~>0.2.3"},
