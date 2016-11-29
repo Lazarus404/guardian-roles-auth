@@ -10,7 +10,7 @@ defmodule Guardian.Roles.Role do
         case user.roles do
           roles = [_|_] -> 
             Enum.reduce(roles, fn(r, acc) -> if acc.role < r.role, do: r, else: acc end)
-          role when is_map(r) ->
+          role when is_map(role) ->
             role
           _ ->
             default
