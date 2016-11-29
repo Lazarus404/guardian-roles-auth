@@ -100,7 +100,7 @@ defmodule Guardian.Roles.UserFromAuth do
     user = if !user, do: repo.get_by(user_mod, email: auth.info.email), else: user
     with {:ok, user} <- if !user, do: create_user(auth, repo), else: {:ok, user} do
       authorization_from_auth(user, auth, repo)
-      {:ok, user}
+      {:ok, :reg, user}
     else
       e -> e
     end
