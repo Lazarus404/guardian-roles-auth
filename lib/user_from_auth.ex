@@ -1,6 +1,4 @@
 defmodule Guardian.Roles.UserFromAuth do
-  alias Ueberauth.Auth
-
   import Guardian.Roles.Utils
 
   def get_or_insert(auth, current_user, repo) do

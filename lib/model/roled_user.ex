@@ -9,7 +9,7 @@ defmodule Guardian.Roles.RoledUser do
 
       @default_perms %{   
         default:  [],   
-        user:     [:primary, :secondary, :tertiary],    
+        user:     [:standard],    
         admin:    [:upload, :dashboard],    
         sys:      [:sys]    
       }
@@ -25,25 +25,19 @@ defmodule Guardian.Roles.RoledUser do
       end
 
       def role_default, do: 0
-      def role_user_primary, do: 1
-      def role_user_secondary, do: 2
-      def role_user_tertiary, do: 3
+      def role_user_standard, do: 1
       def role_admin_upload, do: 10
       def role_admin_dashboard, do: 50
       def role_sys_sys, do: 100
 
-      def add_primary!(%user_mod{} = u, %group_mod{} = s), do: add_role(u, s, &role_user_primary/0)
-      def add_secondary!(%user_mod{} = u, %group_mod{} = s), do: add_role(u, s, &role_user_secondary/0)
-      def add_tertiary!(%user_mod{} = u, %group_mod{} = s), do: add_role(u, s, &role_user_tertiary/0)
+      def add_standard!(%user_mod{} = u, %group_mod{} = s), do: add_role(u, s, &role_user_standard/0)
       def add_upload!(%user_mod{} = u, %group_mod{} = s), do: add_role(u, s, &role_admin_upload/0)
       def add_admin!(%user_mod{} = u, %group_mod{} = s), do: add_role(u, s, &role_admin_dashboard/0)
       def add_sys!(%user_mod{} = u, %group_mod{} = s) do
         %{add_role(u, s, &role_sys_sys/0) | is_sys: true} # ephemeral
       end
 
-      def make_primary!(%user_mod{} = u, %group_mod{} = s), do: make_role(u, s, &role_user_primary/0)
-      def make_secondary!(%user_mod{} = u, %group_mod{} = s), do: make_role(u, s, &role_user_secondary/0)
-      def make_tertiary!(%user_mod{} = u, %group_mod{} = s), do: make_role(u, s, &role_user_tertiary/0)
+      def make_standard!(%user_mod{} = u, %group_mod{} = s), do: make_role(u, s, &role_user_standard/0)
       def make_upload!(%user_mod{} = u, %group_mod{} = s), do: make_role(u, s, &role_admin_upload/0)
       def make_admin!(%user_mod{} = u, %group_mod{} = s), do: make_role(u, s, &role_admin_dashboard/0)
       def make_sys!(%user_mod{} = u, %group_mod{} = s) do
