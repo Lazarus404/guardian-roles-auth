@@ -26,8 +26,10 @@ defmodule Guardian.Roles.UserFromAuth do
         {:error, :password_empty}
       ^pwc ->
         validate_pw_length(pw, email)
+      _ when is_nil(pwc) ->
+        {:error, :not_found}
       _ ->
-        {:error, :password_confirmation_does_not_match}     
+        {:error, :password_confirmation_does_not_match}
     end
   end
 
@@ -118,7 +120,7 @@ defmodule Guardian.Roles.UserFromAuth do
   end
 
   defp auth_and_validate(%{provider: :identity} = auth, repo) do
-    case repo.get_by(auth_mod, uid: uid_from_auth(auth), provider: to_string(auth.provider)) do
+    case repo.get_by(auth_mod, uid: uid_from_auth(auth) || 0, provider: to_string(auth.provider)) do
       nil -> {:error, :not_found}
       authorization ->
         case auth.credentials.other.password do
