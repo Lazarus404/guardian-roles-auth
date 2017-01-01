@@ -120,7 +120,7 @@ defmodule Guardian.Roles.UserFromAuth do
   end
 
   defp auth_and_validate(%{provider: :identity} = auth, repo) do
-    case repo.get_by(auth_mod, uid: uid_from_auth(auth) || 0, provider: to_string(auth.provider)) do
+    case repo.get_by(auth_mod, uid: uid_from_auth(auth) || "error", provider: to_string(auth.provider)) do
       nil -> {:error, :not_found}
       authorization ->
         case auth.credentials.other.password do
